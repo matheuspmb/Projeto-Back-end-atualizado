@@ -103,9 +103,9 @@ const usuarioController = {
       if (!req.usuario.admin) {
         return res.status(403).json({ error: 'Acesso não autorizado' });
       }
-
-      const usuarioExcluido = await Usuario.findByIdAndRemove(id);
-
+      console.log(req.usuario);
+      const usuarioExcluido = await Usuario.findByIdAndDelete(id);
+      console.log("teste");
       if (!usuarioExcluido) {
         return res.status(404).json({ error: 'Usuário não encontrado' });
       }

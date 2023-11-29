@@ -2,13 +2,18 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
   // Obtem o token do cabeçalho da solicitação
-  const token = req.header('Authorization');
+  const authorizationHeader = req.headers["authorization"];
+
+  const token = authorizationHeader
+    ? authorizationHeader.replace("Bearer ", "")
+    : "";
 
   // Verifica se o token está presente
   if (!token) {
     return res.status(401).json({ error: 'Acesso não autorizado. Token não fornecido.' });
   }
 
+  console.log(token);
   try {
     // Verifica se o token é válido
     const decoded = jwt.verify(token, '123@321'); // chave secreta

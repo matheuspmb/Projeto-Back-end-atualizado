@@ -6,6 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const filmeRoutes = require('./routes/filmeRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const aluguelRoutes = require('./routes/aluguelRoutes');
+const install = require('./routes/install')
 
 // forma de ler JSON / middlewares
 app.use(
@@ -56,3 +57,4 @@ const swaggerOptions = {
 app.use(filmeRoutes);
 app.use(usuarioRoutes);
 app.use(aluguelRoutes);
+app.use(install);
