@@ -39,7 +39,7 @@ const aluguelController = {
   excluirAluguel: async (req, res) => {
     try {
       const { id } = req.params;
-      const aluguelExcluido = await Aluguel.findByIdAndRemove(id);
+      const aluguelExcluido = await Aluguel.findByIdAndDelete(id);
 
       if (!aluguelExcluido) {
         res.status(404).json({ error: 'Aluguel não encontrado' });

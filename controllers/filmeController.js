@@ -39,7 +39,7 @@ const filmeController = {
   excluirFilme: async (req, res) => {
     try {
       const { id } = req.params;
-      const filmeExcluido = await Filme.findByIdAndRemove(id);
+      const filmeExcluido = await Filme.findByIdAndDelete(id);
 
       if (!filmeExcluido) {
         res.status(404).json({ error: 'Filme não encontrado' });
