@@ -13,7 +13,6 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ error: 'Acesso não autorizado. Token não fornecido.' });
   }
 
-  console.log(token);
   try {
     // Verifica se o token é válido
     const decoded = jwt.verify(token, '123@321'); // chave secreta
