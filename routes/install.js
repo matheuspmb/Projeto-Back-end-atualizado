@@ -38,6 +38,16 @@ router.get('/install', async (req, res) => {
             }
         ]
 
+        await Promise.all(userList.map(async (item) => {
+            await Usuario.create({
+                nome: item.nome,
+                email: item.email,
+                senha: await bcrypt.hash(item.senha, 10),
+                admin: item.admin,
+            });
+        }));
+
+
         const filmeList = [
             {
                 titulo: "Cidade de Deus",
@@ -75,65 +85,73 @@ router.get('/install', async (req, res) => {
             }
         ]
 
-       /* const aluguelList = [
-            {
-                usuario:  ,
-                filme: ,
-                dataInicio: ,
-                dataFim: ,
-            },
-            {
-                usuario: ,
-                filme: ,
-                dataInicio: ,
-                dataFim: ,
-            },
-            {
-                usuario: ,
-                filme: ,
-                dataInicio: ,
-                dataFim: ,
-            },
-            {
-                usuario: ,
-                filme: ,
-                dataInicio: ,
-                dataFim: ,
-            },
-            {
-                usuario: ,
-                filme: ,
-                dataInicio: ,
-                dataFim: ,
-            },
-        ] */
-
-        await Promise.all(userList.map(async (item) => {
-            await Usuario.create({
-              nome: item.nome,
-              email: item.email,
-              senha: await bcrypt.hash(item.senha, 10),
-              admin: item.admin,
-            });
-        }));
-
         await Promise.all(filmeList.map(async (item) => {
             await Filme.create({
-              titulo: item.titulo,
-              diretor: item.diretor,
-              anoLancamento: item.anoLancamento,
-              categoria: item.categoria,
+                titulo: item.titulo,
+                diretor: item.diretor,
+                anoLancamento: item.anoLancamento,
+                categoria: item.categoria,
             });
         }));
 
-       /* await Promise.all(aluguelList.map(async (item) => {
+        // Contadores externos para manter a ordem de inserção
+        let usuarioCounter = 1;
+        let filmeCounter = 1;
+
+        // Função para obter IDs automaticamente pela ordem de inserção
+        const getObjectIdByOrder = async (model, counter) => {
+            const result = await model.findOne().sort({ _id: 1 }).skip(counter - 1).lean();
+            return result ? result._id : null;
+        };
+
+
+        const aluguelList = [
+            {
+                usuario: null,
+                filme: null,
+                dataInicio: new Date('2023-02-29'),
+                dataFim: new Date('2023-03-02'),
+            },
+            {
+                usuario: null,
+                filme: null,
+                dataInicio: new Date('2023-05-11'),
+                dataFim: new Date('2023-05-014'),
+            },
+            {
+                usuario: null,
+                filme: null,
+                dataInicio: new Date('2023-08-25'),
+                dataFim: new Date('2023-08-28'),
+            },
+            {
+                usuario: null,
+                filme: null,
+                dataInicio: new Date('2023-11-28'),
+                dataFim: new Date('2023-12-02'),
+            },
+            {
+                usuario: null,
+                filme: null,
+                dataInicio: new Date('2023-06-26'),
+                dataFim: new Date('2023-07-01'),
+            },
+        ]
+
+        // Preencher os IDs automaticamente na lista de Aluguéis
+        await Promise.all(aluguelList.map(async (item) => {
+            item.usuario = await getObjectIdByOrder(Usuario, usuarioCounter++);
+            item.filme = await getObjectIdByOrder(Filme, filmeCounter++);
+        }));
+
+        await Promise.all(aluguelList.map(async (item) => {
             await Aluguel.create({
-              usuario: item.usuario,
-              filme: item.filme,
-              dataInicio: item.dataInicio,
-              dataFim: item.dataFim,
+                usuario: item.usuario,
+                filme: item.filme,
+                dataInicio: item.dataInicio,
+                dataFim: item.dataFim,
             });
-        })); */
+        }));
     }
 
     return res.status(422).json("Todos os campo preenchidos");
