@@ -138,7 +138,7 @@ router.get('/install', async (req, res) => {
             },
         ]
 
-        // Preencher os IDs automaticamente na lista de Aluguéis
+        // Preenchendo os IDs automaticamente na lista de Aluguéis
         await Promise.all(aluguelList.map(async (item) => {
             item.usuario = await getObjectIdByOrder(Usuario, usuarioCounter++);
             item.filme = await getObjectIdByOrder(Filme, filmeCounter++);

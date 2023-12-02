@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario');
+const isAdminMiddleware = require('../middlewares/isAdminMiddleware')
 
 const usuarioController = {
   criarUsuario: async (req, res) => {
@@ -33,11 +34,6 @@ const usuarioController = {
 
   criarAdministrador: async (req, res) => {
     try {
-      // Verificando se o usuário que fez a solicitação é um administrador
-      if (!req.usuario.admin) {
-        return res.status(403).json({ error: 'Acesso não autorizado' });
-      }
-
       const { nome, email, senha } = req.body;
 
       // Hash da senha
@@ -60,11 +56,6 @@ const usuarioController = {
 
   listarUsuarios: async (req, res) => {
     try {
-      // Verificando se o usuário que fez a solicitação é um administrador
-      if (!req.usuario.admin) {
-        return res.status(403).json({ error: 'Acesso não autorizado' });
-      }
-
       const usuarios = await Usuario.find();
       res.status(200).json(usuarios);
     } catch (error) {
@@ -77,8 +68,8 @@ const usuarioController = {
     try {
       const { id } = req.params;
 
-      // Verificando se o usuário que fez a solicitação é o próprio usuário ou um administrador
-      if (!req.usuario.admin && req.usuario.id !== id) {
+      // Verificando se o usuário que fez a solicitação é o próprio usuário 
+      if (req.usuario.id !== id) {
         return res.status(403).json({ error: 'Acesso não autorizado' });
       }
 
@@ -99,10 +90,6 @@ const usuarioController = {
     try {
       const { id } = req.params;
 
-      // Verificando se o usuário que fez a solicitação é um administrador
-      if (!req.usuario.admin) {
-        return res.status(403).json({ error: 'Acesso não autorizado' });
-      }
       console.log(req.usuario);
       const usuarioExcluido = await Usuario.findByIdAndDelete(id);
       console.log("teste");
@@ -122,8 +109,8 @@ const usuarioController = {
       const { id } = req.params;
       const { nome, email } = req.body;
 
-      // Certifica-se de que o usuário que faz a solicitação é o próprio usuário ou um administrador
-      if (!req.usuario.admin && req.usuario.id !== id) {
+      // Certifica-se de que o usuário que faz a solicitação é o próprio usuário
+      if (req.usuario.id !== id) {
         return res.status(403).json({ error: 'Acesso não autorizado' });
       }
 
