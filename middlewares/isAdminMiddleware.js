@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-
 const isAdminMiddleware = (req, res, next) => {
   // Verifica se o usuário é um administrador
   if (!req.usuario || !req.usuario.admin) {

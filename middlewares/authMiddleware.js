@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
   const authorizationHeader = req.headers["authorization"];
 
   const token = authorizationHeader
-    ? authorizationHeader.replace("Bearer ", "")
+? authorizationHeader.replace("Bearer ", "")
     : "";
 
   // Verifica se o token está presente
