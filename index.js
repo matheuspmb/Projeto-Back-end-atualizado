@@ -15,12 +15,6 @@ app.use(
 
 app.use(express.json())
 
-//rota inicial / endpoint
-app.get('/', (req, res) => {
-
-    res.json({message: 'Oi Express!'})
-})
-
 //Conectando ao MongoDB
 mongoose.connect('mongodb+srv://matheusp6378:Matheus00@apicluster.7vmz3an.mongodb.net/?retryWrites=true&w=majority')
 .then(() => {
